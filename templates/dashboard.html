@@ -1,0 +1,165 @@
+﻿{% extends "base.html" %}
+
+{% block title %}AI Study Planner — Мой план{% endblock %}
+
+{% block content %}
+<section class="dashboard">
+  <div class="dashboard-header">
+    <div>
+      <p class="eyebrow">Мой план</p>
+      <h1>Собери свой учебный день</h1>
+      <p class="lead">
+        Добавляй занятия, отмечай выполненное и смотри прогресс. Всё сохраняется локально.
+      </p>
+    </div>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value">{{ total }}</div>
+        <div class="stat-label">Сессий впереди</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">{{ done }}</div>
+        <div class="stat-label">Выполнено</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">{{ minutes }}</div>
+        <div class="stat-label">Минут фокуса</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-grid">
+    <form class="panel form-panel" method="post" action="{{ url_for('create_session') }}">
+      <h2>Добавить занятие</h2>
+      <label>
+        Название
+        <input type="text" name="title" placeholder="Напр. Алгебра" required />
+      </label>
+      <div class="form-row">
+        <label>
+          Дата
+          <input type="date" name="session_date" required />
+        </label>
+        <label>
+          Время
+          <input type="time" name="session_time" required />
+        </label>
+      </div>
+      <div class="form-row">
+        <label>
+          Длительность (мин)
+          <input type="number" name="duration_min" min="10" value="45" required />
+        </label>
+        <label>
+          Приоритет
+          <select name="priority">
+            <option>Высокий</option>
+            <option selected>Средний</option>
+            <option>Низкий</option>
+          </select>
+        </label>
+      </div>
+      <label>
+        Предмет
+        <select name="subject_id">
+          <option value="">Без предмета</option>
+          {% for subject in subjects %}
+            <option value="{{ subject['id'] }}">{{ subject['name'] }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>
+        Заметки
+        <textarea name="notes" rows="3" placeholder="Что важно повторить?"></textarea>
+      </label>
+      <button class="btn primary" type="submit">Добавить в план</button>
+    </form>
+
+    <div class="panel list-panel">
+      <div class="panel-header">
+        <h2>Ближайшие занятия</h2>
+        <span class="pill">{{ total }} всего</span>
+      </div>
+
+      {% if sessions %}
+        <div class="session-list">
+          {% for session in sessions %}
+            <div class="session-item {% if session['completed'] %}is-done{% endif %}">
+              <div>
+                <div class="session-title">{{ session['title'] }}</div>
+                <div class="session-meta">
+                  {{ session['session_date'] }} • {{ session['session_time'] }} • {{ session['duration_min'] }} мин
+                </div>
+                <div class="session-tags">
+                  <span class="tag">{{ session['priority'] }}</span>
+                  {% if session['subject_name'] %}
+                    <span class="tag subject" data-subject-color="{{ session['subject_color'] }}">
+                      {{ session['subject_name'] }}
+                    </span>
+                  {% endif %}
+                  {% if session['notes'] %}
+                    <span class="tag ghost">{{ session['notes'] }}</span>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="session-actions">
+                <form method="post" action="{{ url_for('toggle_session', session_id=session['id']) }}">
+                  <button class="btn ghost" type="submit">
+                    {% if session['completed'] %}Вернуть{% else %}Готово{% endif %}
+                  </button>
+                </form>
+                <form method="post" action="{{ url_for('delete_session', session_id=session['id']) }}">
+                  <button class="btn danger" type="submit">Удалить</button>
+                </form>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty">
+          Пока пусто. Добавь первое занятие — и план появится тут.
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="panel tips-panel">
+    <div class="panel-header">
+      <h2>AI-подсказки</h2>
+      <span class="pill">Умный фокус</span>
+    </div>
+    <ul class="tips-list">
+      {% for tip in tips %}
+        <li>{{ tip }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="panel import-export">
+    <div class="panel-header">
+      <h2>Импорт / Экспорт</h2>
+      <span class="pill">JSON / CSV</span>
+    </div>
+    <div class="import-grid">
+      <form method="post" action="{{ url_for('import_json') }}" enctype="multipart/form-data">
+        <label>
+          Импорт JSON
+          <input type="file" name="file" accept=".json,application/json" required />
+        </label>
+        <button class="btn ghost" type="submit">Загрузить JSON</button>
+      </form>
+      <form method="post" action="{{ url_for('import_csv') }}" enctype="multipart/form-data">
+        <label>
+          Импорт CSV
+          <input type="file" name="file" accept=".csv,text/csv" required />
+        </label>
+        <button class="btn ghost" type="submit">Загрузить CSV</button>
+      </form>
+    </div>
+    <div class="export-actions">
+      <a class="btn primary" href="{{ url_for('export_json') }}">Скачать JSON</a>
+      <a class="btn ghost" href="{{ url_for('export_csv') }}">Скачать CSV</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

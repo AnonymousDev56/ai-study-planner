@@ -1,0 +1,55 @@
+﻿{% extends "base.html" %}
+
+{% block title %}AI Study Planner — Календарь{% endblock %}
+
+{% block content %}
+<section class="dashboard">
+  <div class="dashboard-header">
+    <div>
+      <p class="eyebrow">Календарь</p>
+      <h1>Неделя в фокусе</h1>
+      <p class="lead">
+        Быстрый обзор на 7 дней и переход к нужной дате.
+      </p>
+    </div>
+  </div>
+
+  <form class="panel calendar-controls" method="get" action="{{ url_for('calendar') }}">
+    <label>
+      Перейти к дате
+      <input type="date" name="date" value="{{ selected_date.isoformat() }}" />
+    </label>
+    <button class="btn primary" type="submit">Показать</button>
+  </form>
+
+  <div class="calendar-grid">
+    {% for day in days %}
+      <div class="panel calendar-day">
+        <div class="calendar-head">
+          <div class="calendar-date">{{ day.date.strftime('%d.%m') }}</div>
+          <div class="calendar-weekday">{{ day.date.strftime('%A') }}</div>
+        </div>
+        {% if day.sessions %}
+          <div class="calendar-list">
+            {% for session in day.sessions %}
+              <div class="calendar-item">
+                <div>
+                  <div class="session-title">{{ session['title'] }}</div>
+                  <div class="session-meta">{{ session['session_time'] }} • {{ session['duration_min'] }} мин</div>
+                </div>
+                {% if session['subject_name'] %}
+                  <span class="tag subject" data-subject-color="{{ session['subject_color'] }}">
+                    {{ session['subject_name'] }}
+                  </span>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="empty">Нет занятий</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

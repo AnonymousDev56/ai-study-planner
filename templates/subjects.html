@@ -1,0 +1,66 @@
+﻿{% extends "base.html" %}
+
+{% block title %}AI Study Planner — Предметы{% endblock %}
+
+{% block content %}
+<section class="dashboard">
+  <div class="dashboard-header">
+    <div>
+      <p class="eyebrow">Предметы</p>
+      <h1>Собери свою библиотеку дисциплин</h1>
+      <p class="lead">
+        Создавай предметы, чтобы группировать занятия и видеть фокус по каждому направлению.
+      </p>
+    </div>
+  </div>
+
+  <div class="dashboard-grid">
+    <form class="panel form-panel" method="post" action="{{ url_for('create_subject') }}">
+      <h2>Новый предмет</h2>
+      <label>
+        Название
+        <input type="text" name="name" placeholder="Напр. Алгебра" required />
+      </label>
+      <label>
+        Цвет метки
+        <input type="color" name="color" value="#e7dfd5" />
+      </label>
+      <button class="btn primary" type="submit">Добавить предмет</button>
+    </form>
+
+    <div class="panel list-panel">
+      <div class="panel-header">
+        <h2>Список предметов</h2>
+        <span class="pill">{{ subjects|length }} всего</span>
+      </div>
+
+      {% if subjects %}
+        <div class="session-list">
+          {% for subject in subjects %}
+            <div class="session-item">
+              <div>
+                <div class="session-title">{{ subject['name'] }}</div>
+                <div class="session-meta">Занятий: {{ subject['sessions_count'] }}</div>
+                <div class="session-tags">
+                  <span class="tag subject" data-subject-color="{{ subject['color'] }}">
+                    {{ subject['name'] }}
+                  </span>
+                </div>
+              </div>
+              <div class="session-actions">
+                <form method="post" action="{{ url_for('delete_subject', subject_id=subject['id']) }}">
+                  <button class="btn danger" type="submit">Удалить</button>
+                </form>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty">
+          Пока нет предметов. Добавь первый предмет слева.
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

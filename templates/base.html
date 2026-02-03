@@ -1,0 +1,55 @@
+﻿<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}AI Study Planner{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="site-header">
+        <div class="brand">
+          <span class="brand-mark">ASP</span>
+          <div>
+            <div class="brand-title">AI Study Planner</div>
+            <div class="brand-subtitle">Учебный план, который подстраивается под тебя</div>
+          </div>
+        </div>
+        <nav class="nav">
+          <a href="{{ url_for('index') }}">Главная</a>
+          <a href="{{ url_for('dashboard') }}">Мой план</a>
+          <a href="{{ url_for('subjects') }}">Предметы</a>
+          <a href="{{ url_for('analytics') }}">Аналитика</a>
+          <a href="{{ url_for('calendar') }}">Календарь</a>
+          {% if session.get('user_id') %}
+            <span class="nav-user">{{ session.get('user_email') }}</span>
+            <a href="{{ url_for('logout') }}">Выйти</a>
+          {% else %}
+            <a href="{{ url_for('login') }}">Войти</a>
+            <a href="{{ url_for('register') }}">Регистрация</a>
+          {% endif %}
+        </nav>
+      </header>
+
+      <main class="main">
+        {% block content %}{% endblock %}
+      </main>
+
+      <footer class="footer">
+        <span>Сделано вместе</span>
+      </footer>
+    </div>
+    <script>
+      document.querySelectorAll("[data-subject-color]").forEach((el) => {
+        el.style.setProperty("--subject-color", el.dataset.subjectColor);
+      });
+      document.querySelectorAll("[data-bar-width]").forEach((el) => {
+        el.style.width = `${el.dataset.barWidth}%`;
+      });
+      document.querySelectorAll("[data-bar-color]").forEach((el) => {
+        el.style.background = el.dataset.barColor;
+      });
+    </script>
+  </body>
+</html>

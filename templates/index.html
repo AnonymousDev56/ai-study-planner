@@ -1,0 +1,45 @@
+﻿{% extends "base.html" %}
+
+{% block title %}AI Study Planner — Главная{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-text">
+    <p class="eyebrow">Сегодня: {{ today.strftime('%d.%m.%Y') }}</p>
+    <h1>Умное расписание обучения, которое держит фокус</h1>
+    <p class="lead">
+      Планируй занятия, отслеживай привычки и получай подсказки — всё в одном месте.
+    </p>
+    <div class="actions">
+      <a class="btn primary" href="{{ url_for('dashboard') }}">Начать</a>
+      <a class="btn ghost" href="#features">Посмотреть фичи</a>
+    </div>
+  </div>
+  <div class="hero-card">
+    <div class="card">
+      <div class="card-title">Сегодняшний план</div>
+      <ul class="task-list">
+        <li>09:00 — Математика (90 мин)</li>
+        <li>11:00 — Английский (45 мин)</li>
+        <li>14:00 — Практика Python (60 мин)</li>
+      </ul>
+      <div class="card-foot">Фокус: 3 / 3</div>
+    </div>
+  </div>
+</section>
+
+<section id="features" class="features">
+  <div class="feature">
+    <h3>Персональный план</h3>
+    <p>Учитываем дедлайны, настроение и доступное время.</p>
+  </div>
+  <div class="feature">
+    <h3>Аналитика прогресса</h3>
+    <p>Смотри, как растёт твоя эффективность и где просадки.</p>
+  </div>
+  <div class="feature">
+    <h3>Подсказки и советы</h3>
+    <p>Мини-рекомендации по ритму и повторению материала.</p>
+  </div>
+</section>
+{% endblock %}

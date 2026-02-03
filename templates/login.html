@@ -1,0 +1,24 @@
+﻿{% extends "base.html" %}
+
+{% block title %}AI Study Planner — Вход{% endblock %}
+
+{% block content %}
+<section class="auth">
+  <div class="panel auth-panel">
+    <h1>Войти</h1>
+    <p class="lead">Доступ к твоему личному плану.</p>
+    <form method="post" action="{{ url_for('login_post') }}" class="auth-form">
+      <label>
+        Email
+        <input type="email" name="email" required />
+      </label>
+      <label>
+        Пароль
+        <input type="password" name="password" required />
+      </label>
+      <button class="btn primary" type="submit">Войти</button>
+    </form>
+    <p class="auth-switch">Нет аккаунта? <a href="{{ url_for('register') }}">Зарегистрироваться</a></p>
+  </div>
+</section>
+{% endblock %}

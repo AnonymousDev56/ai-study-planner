@@ -1,0 +1,100 @@
+﻿{% extends "base.html" %}
+
+{% block title %}AI Study Planner — Аналитика{% endblock %}
+
+{% block content %}
+<section class="dashboard">
+  <div class="dashboard-header">
+    <div>
+      <p class="eyebrow">Аналитика</p>
+      <h1>Где твой фокус и как растёт прогресс</h1>
+      <p class="lead">
+        Смотри распределение времени по предметам и общий уровень концентрации.
+      </p>
+    </div>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value">{{ total }}</div>
+        <div class="stat-label">Сессий впереди</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">{{ done }}</div>
+        <div class="stat-label">Выполнено</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">{{ focus_rate }}%</div>
+        <div class="stat-label">Фокус</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <h2>Распределение по предметам</h2>
+      <span class="pill">{{ minutes }} мин</span>
+    </div>
+
+    {% if by_subject %}
+      <div class="chart">
+        {% for row in by_subject %}
+          {% set width = 0 %}
+          {% if minutes > 0 %}
+            {% set width = (row['minutes'] / minutes * 100) | round(1) %}
+          {% endif %}
+          <div class="chart-row">
+            <div class="chart-label">
+              <span class="tag subject" data-subject-color="{{ row['color'] }}">{{ row['name'] }}</span>
+              <span class="chart-meta">{{ row['minutes'] or 0 }} мин • {{ row['count_sessions'] }} сессий</span>
+            </div>
+            <div class="chart-bar">
+              <span data-bar-width="{{ width }}" data-bar-color="{{ row['color'] }}"></span>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty">Пока нет данных. Добавь несколько занятий.</div>
+    {% endif %}
+  </div>
+
+  <div class="dashboard-grid">
+    <div class="panel">
+      <div class="panel-header">
+        <h2>Статистика по дням</h2>
+        <span class="pill">7 дней</span>
+      </div>
+      {% if daily %}
+        <div class="stats-list">
+          {% for row in daily %}
+            <div class="stats-row">
+              <div class="stats-label">{{ row['label'] }}</div>
+              <div class="stats-meta">{{ row['minutes'] or 0 }} мин • {{ row['count_sessions'] }} сессий</div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty">Нет данных за последние дни.</div>
+      {% endif %}
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <h2>Статистика по неделям</h2>
+        <span class="pill">4 недели</span>
+      </div>
+      {% if weekly %}
+        <div class="stats-list">
+          {% for row in weekly %}
+            <div class="stats-row">
+              <div class="stats-label">{{ row['label'] }}</div>
+              <div class="stats-meta">{{ row['minutes'] or 0 }} мин • {{ row['count_sessions'] }} сессий</div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty">Нет данных за последние недели.</div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}
