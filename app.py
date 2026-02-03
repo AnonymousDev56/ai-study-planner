@@ -83,6 +83,10 @@ def init_db() -> None:
             conn.execute("ALTER TABLE subjects ADD COLUMN user_id INTEGER")
 
 
+# Initialize DB on startup for WSGI servers (e.g., gunicorn on Render).
+init_db()
+
+
 def login_required(view: Callable[..., Any]) -> Callable[..., Any]:
     @wraps(view)
     def wrapped(*args: Any, **kwargs: Any) -> Any:
