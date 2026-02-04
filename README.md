@@ -53,3 +53,5 @@ python app.py
 - `static/` — CSS и статические файлы
 - `requirements.txt` — зависимости
 
+- Live Demo: https://ai-study-planner-opzs.onrender.com/dashboard
+
