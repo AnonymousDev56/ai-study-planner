@@ -36,16 +36,16 @@ def adapt_sql(sql: str) -> str:
 
 def get_conn():
     if USE_POSTGRES:
-        import psycopg2
-        return psycopg2.connect(DATABASE_URL, sslmode="require")
+        import psycopg
+        return psycopg.connect(DATABASE_URL, sslmode="require")
     return sqlite3.connect(DB_PATH)
 
 
 def query(sql: str, params: Iterable[Any] = (), fetch: str | None = "all"):
     if USE_POSTGRES:
-        from psycopg2.extras import RealDictCursor
+        import psycopg
         with get_conn() as conn:
-            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            with conn.cursor(row_factory=psycopg.rows.dict_row) as cur:
                 cur.execute(adapt_sql(sql), list(params))
                 if fetch == "one":
                     return cur.fetchone()
@@ -88,7 +88,7 @@ def execute_many(sql: str, params_list: Iterable[Iterable[Any]]) -> None:
 def is_unique_violation(exc: Exception) -> bool:
     if isinstance(exc, sqlite3.IntegrityError):
         return True
-    return getattr(exc, "pgcode", None) == "23505"
+    return getattr(exc, "sqlstate", None) == "23505"
 
 
 def init_db() -> None:
