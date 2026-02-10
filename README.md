@@ -60,8 +60,6 @@ python app.py
 
   <img width="1600" height="899" alt="image" src="https://github.com/user-attachments/assets/cee7316c-d47b-44a8-89c6-5264a516a647" />
 
-  <img width="1600" height="899" alt="image" src="https://github.com/user-attachments/assets/4f952f9d-f50f-4ac3-9f93-abac4ae4544a" />
-
   <img width="1600" height="899" alt="image" src="https://github.com/user-attachments/assets/e325dfcc-5af0-4bf1-bdfd-efdab5f90e3b" />
 
   <img width="1919" height="1079" alt="Снимок экрана 2026-02-03 203501" src="https://github.com/user-attachments/assets/a4a59f08-feb3-431c-8608-f67ec43744d6" />
