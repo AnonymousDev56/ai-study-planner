@@ -55,3 +55,8 @@ python app.py
 
 - Live Demo: https://ai-study-planner-opzs.onrender.com/dashboard
 
+- Скриншоты
+
+  <img width="1600" height="899" alt="image" src="https://github.com/user-attachments/assets/cee7316c-d47b-44a8-89c6-5264a516a647" />
+
+
